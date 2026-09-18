@@ -129,9 +129,10 @@ public class SecurityConfig {
                 ).permitAll()
 
                 // Login and Register
-              .requestMatchers(
+             .requestMatchers(
     "/auth/register",
-    "/auth/login"
+    "/auth/login",
+    "/api/interview/start"
 ).permitAll()
 
 .anyRequest().authenticated()
