@@ -67,12 +67,13 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(
-                List.of(
-                        "http://localhost:5173",
-                        "https://exchange-ai-omega.vercel.app"
-                )
-        );
+       configuration.setAllowedOrigins(
+    List.of(
+        "http://localhost:5173",
+        "https://exchange-ai-omega.vercel.app",
+        "https://exchange-ai-d4pi-30r3fbp22-ashish7079s-projects.vercel.app"
+    )
+);
 
         configuration.setAllowedMethods(
                 List.of(
