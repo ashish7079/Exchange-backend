@@ -1,7 +1,10 @@
 package com.example.demo.service;
 
+import java.time.Duration;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -16,11 +19,17 @@ public class InterViewServ {
             @Value("${INTERVIEW_AI_SERVICE_URL}") String interviewAiServiceUrl
     ) {
 
+        SimpleClientHttpRequestFactory factory =
+                new SimpleClientHttpRequestFactory();
+
+        factory.setConnectTimeout(Duration.ofSeconds(30));
+        factory.setReadTimeout(Duration.ofSeconds(120));
+
         this.restClient = RestClient.builder()
                 .baseUrl(interviewAiServiceUrl)
+                .requestFactory(factory)
                 .build();
     }
-
 
     public String startInterview(String language) {
 
@@ -38,7 +47,6 @@ public class InterViewServ {
                 .retrieve()
                 .body(String.class);
     }
-
 
     public String submitAnswer(
             String interviewId,
