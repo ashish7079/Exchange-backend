@@ -11,7 +11,6 @@ import com.example.demo.service.InterViewServ;
 
 @RestController
 @RequestMapping("/api/interview")
-@CrossOrigin(origins = "http://localhost:5173")
 public class InterViewContr {
 
     private final InterViewServ serv;
