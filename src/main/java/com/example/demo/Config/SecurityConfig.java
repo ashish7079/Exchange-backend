@@ -135,9 +135,6 @@ public class SecurityConfig {
 ).permitAll()
 
 .anyRequest().authenticated()
-
-                // Everything else requires JWT
-                .anyRequest().authenticated()
             )
 
             // Stateless session
