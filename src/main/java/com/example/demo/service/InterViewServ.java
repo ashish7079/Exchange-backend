@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -11,10 +12,12 @@ public class InterViewServ {
 
     private final RestClient restClient;
 
-    public InterViewServ() {
+    public InterViewServ(
+            @Value("${INTERVIEW_AI_SERVICE_URL}") String interviewAiServiceUrl
+    ) {
 
         this.restClient = RestClient.builder()
-                .baseUrl("http://localhost:5000")
+                .baseUrl(interviewAiServiceUrl)
                 .build();
     }
 
@@ -29,7 +32,7 @@ public class InterViewServ {
         return restClient.post()
                 .uri("/interview/start")
                 .contentType(
-                    MediaType.APPLICATION_FORM_URLENCODED
+                        MediaType.APPLICATION_FORM_URLENCODED
                 )
                 .body(body)
                 .retrieve()
@@ -37,16 +40,22 @@ public class InterViewServ {
     }
 
 
-    public String submitAnswer(String interviewId, String answer) {
+    public String submitAnswer(
+            String interviewId,
+            String answer
+    ) {
 
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        MultiValueMap<String, Object> body =
+                new LinkedMultiValueMap<>();
 
-        body.add("interview_id",interviewId);
-        body.add("answer", answer );
+        body.add("interview_id", interviewId);
+        body.add("answer", answer);
 
         return restClient.post()
                 .uri("/interview/answer")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .contentType(
+                        MediaType.APPLICATION_FORM_URLENCODED
+                )
                 .body(body)
                 .retrieve()
                 .body(String.class);
