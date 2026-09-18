@@ -25,6 +25,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.example.demo.filters.Jwtfilter;
 
+import java.util.List;
+
 
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -56,28 +58,35 @@ public class SecurityConfig {
     }
 
 
-    // CORS configuration
+    // =========================
+    // CORS CONFIGURATION
+    // =========================
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(
-                java.util.List.of("http://localhost:5173")
+                List.of(
+                        "http://localhost:5173",
+                        "https://exchange-ai-omega.vercel.app"
+                )
         );
 
         configuration.setAllowedMethods(
-                java.util.List.of(
+                List.of(
                         "GET",
                         "POST",
                         "PUT",
                         "DELETE",
-                        "OPTIONS"
+                        "OPTIONS",
+                        "PATCH"
                 )
         );
 
         configuration.setAllowedHeaders(
-                java.util.List.of("*")
+                List.of("*")
         );
 
         configuration.setAllowCredentials(true);
@@ -94,43 +103,55 @@ public class SecurityConfig {
     }
 
 
+    // =========================
+    // SECURITY CONFIGURATION
+    // =========================
+
     @Bean
     public SecurityFilterChain securityFilter(HttpSecurity http)
             throws Exception {
 
         http
+
+            // Enable CORS
             .cors(cors -> {})
 
+            // Disable CSRF because we are using JWT
             .csrf(csrf -> csrf.disable())
 
+            // Authorization
             .authorizeHttpRequests(auth -> auth
 
-                // Allow browser preflight request
+                // Browser preflight requests
                 .requestMatchers(
                         org.springframework.http.HttpMethod.OPTIONS,
                         "/**"
                 ).permitAll()
 
-                // Login and register don't need JWT
+                // Login and Register
                 .requestMatchers(
                         "/auth/register",
                         "/auth/login"
                 ).permitAll()
 
-                // Everything else needs JWT
+                // Everything else requires JWT
                 .anyRequest().authenticated()
             )
 
+            // Stateless session
             .sessionManagement(session ->
                     session.sessionCreationPolicy(
                             SessionCreationPolicy.STATELESS
                     )
             );
 
+
+        // JWT filter
         http.addFilterBefore(
                 filter,
                 UsernamePasswordAuthenticationFilter.class
         );
+
 
         return http.build();
     }
