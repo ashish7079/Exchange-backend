@@ -129,10 +129,11 @@ public class SecurityConfig {
                 ).permitAll()
 
                 // Login and Register
-                .requestMatchers(
-                        "/auth/register",
-                        "/auth/login"
-                ).permitAll()
+              .requestMatchers(
+        "/auth/register",
+        "/auth/login",
+        "/api/resume/analyze"
+).permitAll()
 
                 // Everything else requires JWT
                 .anyRequest().authenticated()
