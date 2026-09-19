@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -14,10 +15,12 @@ public class CareerChatbotServ {
 
     private final RestClient restClient;
 
-    public CareerChatbotServ() {
+    public CareerChatbotServ(
+            @Value("${CHATBOT_AI_SERVICE_URL}")
+            String chatbotAiServiceUrl) {
 
         this.restClient = RestClient.builder()
-                .baseUrl("http://localhost:5003")
+                .baseUrl(chatbotAiServiceUrl)
                 .build();
     }
 
