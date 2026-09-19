@@ -1,19 +1,34 @@
 package com.example.demo.service;
 
+import java.time.Duration;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 @Service
 public class ResumeBuilderServ {
 
     private final RestClient restClient;
 
-    public ResumeBuilderServ() {
+    public ResumeBuilderServ(
+            @Value("${RESUME_BUILDER_AI_SERVICE_URL}")
+            String resumeBuilderAiServiceUrl
+    ) {
+
+        SimpleClientHttpRequestFactory factory =
+                new SimpleClientHttpRequestFactory();
+
+        factory.setConnectTimeout(Duration.ofSeconds(30));
+        factory.setReadTimeout(Duration.ofSeconds(120));
+
         this.restClient = RestClient.builder()
-                .baseUrl("http://localhost:5000")
+                .baseUrl(resumeBuilderAiServiceUrl)
+                .requestFactory(factory)
                 .build();
     }
 
