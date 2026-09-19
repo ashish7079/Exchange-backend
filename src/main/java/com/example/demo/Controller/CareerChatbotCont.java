@@ -7,7 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/chatbot")
-@CrossOrigin(origins = "http://localhost:5173")
 public class CareerChatbotCont {
 
     private final CareerChatbotServ serv;
